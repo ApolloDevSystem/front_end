@@ -5,6 +5,7 @@ export type RootStackParamList = {
     Login: undefined;
     Home: undefined;
     Atendimentos: undefined
+    AgendamentoScreen: undefined
 };
 
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;

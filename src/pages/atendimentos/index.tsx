@@ -23,14 +23,14 @@ const atendimentos: Atendimento[] = [
         onPress: () => console.log('Atendimento 1'),
     },
     {
-        id: 1,
+        id: 2,
         title: 'Atendimento 2',
         subtitle: 'Detalhes do atendimento 2',
         icon: <Details hour="09:00" status="gray" />,
         onPress: () => console.log('Atendimento 2'),
     },
     {
-        id: 2,
+        id: 3,
         title: 'Atendimento 3',
         subtitle: 'Detalhes do atendimento 3',
         icon: <Details hour="10:00" status="red" />,
