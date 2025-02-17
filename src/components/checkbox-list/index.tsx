@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/Feather"; // Ícones Feather (pode trocar por MaterialIcons)
 
 interface CheckboxOption {
   label: string;
@@ -14,7 +15,7 @@ interface CheckboxListProps {
 
 const CheckboxList: React.FC<CheckboxListProps> = ({ options, selectedValues, onChange }) => {
   const toggleSelection = (value: string) => {
-    let newSelected = selectedValues.includes(value)
+    const newSelected = selectedValues.includes(value)
       ? selectedValues.filter((v) => v !== value)
       : [...selectedValues, value];
 
@@ -23,13 +24,39 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ options, selectedValues, on
 
   return (
     <View>
-      {options.map((option) => (
-        <TouchableOpacity key={option.value} onPress={() => toggleSelection(option.value)}>
-          <Text>{option.label} {selectedValues.includes(option.value) ? "✅" : "⬜"}</Text>
-        </TouchableOpacity>
-      ))}
+      {options.map((option) => {
+        const isSelected = selectedValues.includes(option.value);
+        return (
+          <TouchableOpacity
+            key={option.value}
+            style={styles.checkboxContainer}
+            onPress={() => toggleSelection(option.value)}
+          >
+            <Text style={styles.label}>{option.label}</Text>
+            <Icon
+              name={isSelected ? "check-square" : "square"}
+              size={24}
+              color={isSelected ? "#142952" : "#7A869A"} // Cor personalizável
+            />
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+  },
+  label: {
+    fontSize: 16,
+    color: "#142952",
+    marginLeft: 10, // Espaço entre o ícone e o texto
+  },
+});
 
 export default CheckboxList;
