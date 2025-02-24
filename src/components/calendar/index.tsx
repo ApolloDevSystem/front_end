@@ -41,7 +41,7 @@ const Calendar: React.FC = () => {
 
             {/* Dias da semana */}
             <View style={styles.weekdays}>
-                {['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'].map((day) => (
+                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].map((day) => (
                     <Text key={day} style={styles.weekdayText}>
                         {day}
                     </Text>

@@ -2,8 +2,12 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 const NotificationIcon = require('../../assets/icons/notificacao.png');
 const MenuIcon = require('../../assets/icons/menu.png');
+import NotificationsModal from '../notificacao';
 
 const Header: React.FC = () => {
+
+  const [isModalVisible, setIsModalVisible] = React.useState(false)
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.menuIcon}>
@@ -12,13 +16,14 @@ const Header: React.FC = () => {
       {/*pegar nome do context*/}
       <Text style={styles.userName}>FRANCISCO CHAGAS</Text>
       <View style={styles.rightContainer}>
-        <TouchableOpacity style={styles.notificationIcon}>
+        <TouchableOpacity style={styles.notificationIcon} onPress={() => setIsModalVisible(true)}>
           <Image source={NotificationIcon} style={styles.notificationIcon} />
         </TouchableOpacity>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>FC</Text>
         </View>
       </View>
+      <NotificationsModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
     </View>
   );
 };
@@ -34,6 +39,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 25,
     height: 60,
+   // borderStartEndRadius: 20,
+   // borderEndEndRadius: 20,
   },
   rightContainer: {
     flexDirection: 'row',

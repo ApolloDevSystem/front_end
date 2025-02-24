@@ -5,7 +5,7 @@ interface ActionCardProps {
   title: string;
   subtitle: string;
   icon?: React.ReactNode; // Agora aceita qualquer componente React, incluindo <Image>
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const Card: React.FC<ActionCardProps> = ({ title, subtitle, icon, onPress }) => {
