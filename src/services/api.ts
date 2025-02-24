@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'http://192.168.0.108:8000/api',
 });
 
 const buildEndpoint = (endpoint: string, id?: string) => {
@@ -28,7 +28,7 @@ export const fetchDataById = async (endpoint: string, id: string) => {
   }
 };
 
-export const createData = async (endpoint: string, data: any) => {
+export const createData = async (endpoint: string, data: unknown) => {
   try {
     const response = await api.post(buildEndpoint(endpoint), data);
     return response.data;
@@ -38,7 +38,8 @@ export const createData = async (endpoint: string, data: any) => {
   }
 };
 
-export const updateData = async (endpoint: string, id: string, data: any) => {
+// troquei any para unknown, 0% de confiança
+export const updateData = async (endpoint: string, id: string, data: unknown) => {
   try {
     const response = await api.put(buildEndpoint(endpoint, id), data);
     return response.data;
