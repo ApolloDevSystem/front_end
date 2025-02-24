@@ -5,18 +5,19 @@ type InputProps = {
   label: string;
   placeholder: string;
   secureTextEntry?: boolean;
-} & TextInputProps; // Permite reutilizar todas as props padrão de TextInput
+  labelColor?: string; // Agora é opcional para evitar erro se não for passado
+} & TextInputProps;
 
-export default function Input({ label, placeholder, secureTextEntry, ...rest }: InputProps) {
+export default function Input({ label, placeholder, labelColor = "#FFFFFF", secureTextEntry, ...rest }: InputProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { color: labelColor }]}>{label}</Text> 
       <TextInput
         style={styles.input}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         placeholderTextColor="#7A869A"
-        {...rest} // Passa as props adicionais
+        {...rest} 
       />
     </View>
   );
@@ -29,7 +30,6 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 5,
-    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -41,4 +41,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
- 

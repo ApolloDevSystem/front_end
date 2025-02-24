@@ -14,6 +14,9 @@ function Home({ navigation }: HomeScreenProps) {
   const goToAtendimentos = () => {
     navigation.navigate('Atendimentos');
   }
+  const goToAgendamentos = () => {
+    navigation.navigate('AgendamentoScreen');
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,7 +39,7 @@ function Home({ navigation }: HomeScreenProps) {
           title="AGENDAR"
           subtitle="SOLICITE O AGENDAMENTO DE UM SERVIÇO"
           icon={<Image source={AgendarIcon} style={styles.icon}/>}
-          onPress={() => Alert.alert("Não implementado")}
+          onPress={() => goToAgendamentos()}
         />
       </ScrollView>
     </SafeAreaView>
