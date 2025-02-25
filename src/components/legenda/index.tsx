@@ -6,13 +6,24 @@ type LegendaProps = {
   color: keyof typeof colors;
   text?: string;
   borderRadius?: number;
+  order?: '1-2' | '2-1';
 };
 
-const Legenda = ({ color, text, borderRadius }: LegendaProps) => {
+const Legenda = ({ color, text, borderRadius, order = '1-2' }: LegendaProps) => {
   return (
     <View style={styles.legend}>
-      <View style={[styles.legendColor, { backgroundColor: colors[color], borderRadius: borderRadius }]} />
-      <Text style={[styles.legendText, { color: colors[color] }]}>{text}</Text>
+      {order === '1-2' ? (
+        <>
+          <View style={[styles.legendColor, { backgroundColor: colors[color], borderRadius: borderRadius }]} />
+          <Text style={[styles.legendText, { color: colors[color] }]}>{text}</Text>
+        </>
+      ) : (
+        <>
+          <Text style={[styles.legendText, { color: colors[color] }]}>{text}</Text>
+          <View style={[styles.legendColor, { backgroundColor: colors[color], borderRadius: borderRadius }]} />
+        </>
+
+      )}
     </View>
   );
 };
@@ -26,7 +37,7 @@ const styles = StyleSheet.create({
   legendColor: {
     width: 20,
     height: 20,
-    marginRight: 5,
+    marginHorizontal: 5,
   },
   legendText: {
     // Remova a cor fixa para permitir a personalização

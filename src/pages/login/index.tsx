@@ -5,6 +5,7 @@ import Button from '../../components/Button';
 import Logo from '../../components/Logo';
 const LogoImage = require("../../assets/img/logo_color.png");
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import colors from '../../components/colors';
 
 export default function LoginScreen() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -25,22 +26,25 @@ export default function LoginScreen() {
 
     return (
         <View style={styles.container}>
-            <Logo imageSource={LogoImage} />
-            <Input
-                label="Usuário:"
-                placeholder="Digite seu usuário"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <Input
-                label="Senha:"
-                placeholder="Digite sua senha"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <Button title="Entrar" onPress={validarLogin} />
-            <Text style={styles.footerText}>KM5 REFRIGERAÇÕES LTDA</Text>
+            <View style={styles.intern}>
+                <Logo imageSource={LogoImage} />
+
+                <Input
+                    label="Usuário:"
+                    placeholder="Digite seu usuário"
+                    value={username}
+                    onChangeText={setUsername}
+                />
+                <Input
+                    label="Senha:"
+                    placeholder="Digite sua senha"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                <Button title="Entrar" onPress={validarLogin} />
+                <Text style={styles.footerText}>KM5 REFRIGERAÇÕES LTDA</Text>
+            </View>
         </View>
     );
 }
@@ -48,10 +52,8 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#51789E',
-        alignItems: 'center',
         justifyContent: 'center',
-        padding: 20,
+        backgroundColor: colors.secondary,
     },
     footerText: {
         marginTop: 20,
@@ -59,5 +61,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
     },
+    intern: {
+        backgroundColor: colors.tertiary,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+        paddingBottom: 70,
+        height: '80%',
+        marginTop: "50%", 
+        borderTopLeftRadius: 40, 
+        borderTopRightRadius: 40,
+    }
 });
 

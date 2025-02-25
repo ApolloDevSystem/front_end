@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../../components/colors";
 import Legenda from "../../components/legenda";
 
@@ -8,10 +8,11 @@ type DetailProps = {
 }
 
 const Details = ({hour, status}:DetailProps) => {
+    
     return (
-        <View style={styles.container}>
-            <Legenda color={status} text={hour} borderRadius={10} />
-        </View>
+        <TouchableOpacity style={styles.container} >
+            <Legenda color={status} text={hour} borderRadius={10} order='2-1'/>
+        </TouchableOpacity>
     )
 }
 
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
       },
       hour: {
         marginRight: 10,
-        color: colors.text,
       },
 })
 

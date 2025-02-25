@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.108:8000/api',
+  baseURL: 'http://192.168.0.108:8000/api', // uriel
+  //baseURL: 'http://10.1.4.29:8000/api',  // kaua
 });
 
 const buildEndpoint = (endpoint: string, id?: string) => {
