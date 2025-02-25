@@ -24,6 +24,7 @@ type Atendimento = {
     }
 };
 
+
 const Atendimentos: React.FC<AtendimentosScreenProps> = ({ navigation }) => {
     const [atendimentos, setAtendimentos] = useState<Atendimento[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -81,7 +82,7 @@ const Atendimentos: React.FC<AtendimentosScreenProps> = ({ navigation }) => {
                                 title={atendimento.cliente_endereco.cliente.nome}
                                 subtitle={`Endereço: ${atendimento.cliente_endereco.endereco.logradouro}`}
                                 icon={<Details hour={atendimento.horario} status={atendimento.status} />}
-                                onPress={() => navigation.navigate("Atendimento")}
+                                onPress={() => navigation.navigate("Atendimento", {atendimento})}
                             />
                         ))}
                     </View>

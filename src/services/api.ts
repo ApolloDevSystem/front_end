@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.18:8000/api',
+  baseURL: 'http://10.1.4.29:8000/api',
 });
 
 const buildEndpoint = (endpoint: string, id?: string) => {

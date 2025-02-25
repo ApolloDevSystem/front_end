@@ -86,7 +86,7 @@ const TaskScreen: React.FC<AtendimentoScreenProps> = ({ navigation }) => {
       <HeaderSecondary navigation={navigation} />
       <View style={styles.main}>
         <View style={styles.header}>
-          <Text style={styles.title}>Casa Aasdlkas</Text>
+          <Text style={styles.title}>Nome do CLiente</Text>
           <Text style={styles.subtitle}>Horário Marcado: 16h</Text>
           <Text style={styles.subtitle}>Endereço: Rua das Carambolas, nº0.</Text>
           <TouchableOpacity style={styles.locationButton} onPress={openMaps}>
