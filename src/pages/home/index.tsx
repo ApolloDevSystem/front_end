@@ -17,6 +17,9 @@ function Home({ navigation }: HomeScreenProps) {
   const goToAgendamentos = () => {
     navigation.navigate('AgendamentoScreen');
   }
+  const goToEquipamentos = () => {
+    navigation.navigate('Equipamentos');
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,7 +36,7 @@ function Home({ navigation }: HomeScreenProps) {
           title="EQUIPAMENTOS E VEÍCULOS"
           subtitle="GERENCIE EQUIPAMENTOS E VEÍCULOS"
           icon={<Image source={CarroIcon} style={styles.icon}/>}
-          onPress={() => Alert.alert("Não implementado")}
+          onPress={() => goToEquipamentos()}
         />
         <ActionCard
           title="AGENDAR"
