@@ -5,25 +5,8 @@ import Card from '../../components/card';
 import Legenda from '../../components/legenda';
 import colors from '../../components/colors';
 import Details from './details';
-import { AtendimentosScreenProps } from '../types';
+import { Atendimento, AtendimentosScreenProps } from '../types';
 import { fetchData } from '../../services/api'; // Importando a função de requisição
-
-type Atendimento = {
-    id: number;
-    title: string;
-    subtitle: string;
-    status: string;
-    horario: string;
-    cliente_endereco: {
-        cliente: {
-            nome: string;
-        }
-        endereco: {
-            logradouro: string;
-        }
-    }
-};
-
 
 const Atendimentos: React.FC<AtendimentosScreenProps> = ({ navigation }) => {
     const [atendimentos, setAtendimentos] = useState<Atendimento[]>([]);

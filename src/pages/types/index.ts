@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 export type Atendimento = {
     id: number;
@@ -13,10 +12,19 @@ export type Atendimento = {
         }
         endereco: {
             logradouro: string;
+            cep: string;
+            bairro: string;
+
         }
-    }
+    },
+    servicos: servico[]
 };
 
+export type servico = {
+    id: number;
+    descricao: string;
+    preco: number;
+}
 
 export type RootStackParamList = {
     Login: undefined;

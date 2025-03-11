@@ -2,13 +2,16 @@ import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import { Modal, TouchableOpacity, View, Text, TextInput, StyleSheet } from 'react-native';
 import Select from '../../components/select';
-
+import { useNavigation, NavigationProp } from '@react-navigation/native'; // Importe o useNavigation e NavigationProp
+import { RootStackParamList } from '../types';
+import { updateData } from '../../services/api';
 
 interface ConcluirProps {
     modalVisible: boolean;
     setModalVisible: (value: boolean) => void;
     valorTotal: number;
     onConfirm: (valorPago: number, desconto: number, metodo: string) => void;
+    atendimentoData: { id: number, observacao: string, selectedTasks: any }; // Supondo que o atendimento seja um objeto com o id
 }
 
 export default function Concluir({
@@ -16,14 +19,41 @@ export default function Concluir({
     setModalVisible,
     valorTotal,
     onConfirm,
+    atendimentoData
 }: ConcluirProps) {
     const [desconto, setDesconto] = useState(0);
     const [valorPago, setValorPago] = useState(0);
     const [metodo, setMetodo] = useState('Dinheiro');
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use o hook useNavigation com o tipo NavigationProp
+
     const handleConfirm = () => {
         onConfirm(valorPago, desconto, metodo);
-        setModalVisible(false);
+        setIsModalVisible(true);
+    };
+
+    const handleClose = async () => {
+        setIsModalVisible(false);
+
+        const objeto = {
+            ...atendimentoData,
+            forma_pagamento: metodo,
+            valor_pago: valorPago,
+            desconto: desconto
+        }
+
+        console.log('Concluindo atendimento', objeto);
+
+        const response = await updateData('atendimento-concluir', atendimentoData.id.toString(), objeto);
+
+        if (response.status === 200) {
+            console.log('Atendimento concluído com sucesso');
+            // Após concluir, navegue para a tela anterior
+            navigation.goBack();
+        } else {
+            console.log('Erro ao concluir o atendimento', response);
+        }
     };
 
     const metodos = [
@@ -31,7 +61,7 @@ export default function Concluir({
         { label: 'Cartão de Crédito', value: 'Cartão de Crédito' },
         { label: 'Cartão de Débito', value: 'Cartão de Débito' },
         { label: 'PIX', value: 'PIX' },
-    ]
+    ];
 
     return (
         <Modal
@@ -70,7 +100,7 @@ export default function Concluir({
                     <Select objeto={metodos} label="Método de Pagamento:" keyLabel={"label"} keyPost={"value"} selectedValue={metodo} onValueChange={setMetodo} />
 
                     <TouchableOpacity
-                        style={[styles.button, styles.pixButton, {backgroundColor: metodo === 'PIX' ? '#4CAF50' : '#ccc'}]}
+                        style={[styles.button, styles.pixButton, { backgroundColor: metodo === 'PIX' ? '#4CAF50' : '#ccc' }]}
                         onPress={() => console.log('Gerar QR Code para PIX')}
                         disabled={metodo !== 'PIX'}
                     >
@@ -89,6 +119,22 @@ export default function Concluir({
                     </TouchableOpacity>
                 </View>
             </View>
+            <Modal visible={isModalVisible} transparent onRequestClose={() => setIsModalVisible(false)}>
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.modalTitle}>Pagamento Confirmado</Text>
+                        <Text style={styles.label}>Valor Pago: R$ {valorPago.toFixed(2)}</Text>
+                        <Text style={styles.label}>Desconto: R$ {desconto.toFixed(2)}</Text>
+                        <Text style={styles.label}>Método de Pagamento: {metodo}</Text>
+                        <TouchableOpacity
+                            style={styles.confirmButton}
+                            onPress={handleClose} // Use a função handleClose
+                        >
+                            <Text style={styles.confirmButtonText}>Fechar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </Modal>
     );
 }
@@ -132,13 +178,6 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: 16,
         width: '100%',
-    },
-    select: {
-        width: '100%',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        marginTop: 4,
     },
     button: {
         marginTop: 12,

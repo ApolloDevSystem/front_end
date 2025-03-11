@@ -9,41 +9,47 @@ import {
 } from 'react-native';
 import * as Linking from 'expo-linking';
 import HeaderSecondary from '../../components/headerSecondary';
-import { AtendimentoScreenProps } from '../types';
+import { AtendimentoScreenProps, RootStackParamList, servico } from '../types';
 import colors from '../../components/colors';
 import Item from '../../components/item';
 import ModalEscolha from '../../components/modalEscolha';
 import TextField from '../../components/textField';
 import Concluir from './concluir';
 import Select from "../../components/select";
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { set } from 'date-fns';
+import { fetchData } from '../../services/api';
+
+type AtendimentoRouteProp = RouteProp<RootStackParamList, "Atendimento">;
 
 const TaskScreen: React.FC<AtendimentoScreenProps> = ({ navigation }) => {
+  const route = useRoute<AtendimentoRouteProp>();
+  const { atendimento } = route.params;
   const [observations, setObservations] = useState('');
-  const [selectedTasks, setSelectedTasks] = useState<{ id: string; quantity: number; customPrice?: number, price?: number }[]>([]);
+  const [selectedTasks, setSelectedTasks] = useState<{ id: number; quantidade: number; customPrice?: number, preco?: number }[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [concluirVisible, setConcluirVisible] = useState(false);
-  const [selectedService, setSelectedService] = useState<string | undefined>('');
-  
-  // Estado para armazenar as tarefas e serviços dinamicamente
-  const [tasks, setTasks] = useState([
-    { id: '1', descricao: 'Limpeza', price: 130.0 },
-    { id: '2', descricao: 'Troca de Peça', price: 250.0 },
-    { id: '3', descricao: 'Instalação', price: 500.0 },
-    { id: '5', descricao: 'Trocar o Óleo', price: 15.0 },
-  ]);
+  const [selectedService, setSelectedService] = useState<string>('');
+  const [dataLocation, setDataLocation] = useState<any>({ longitude: 0, latitude: 0 });
+  const [tasks, setTasks] = useState<{ id: number; descricao: string; preco: number }[]>(atendimento.servicos);
+  const [servicos, setServicos] = useState<servico[]>([]);
+  const [atendimentoData, setAtendimentoData] = useState<{ id: number; observacao: string; selectedTasks: { id: number; quantidade: number; customPrice?: number, preco?: number }[] }>({ id: 0, observacao: '', selectedTasks: [] }); // Estado para armazenar os dados do atendimento
 
-  const [servicos, setServicos] = useState([
-    { id: '4', descricao: 'Lavagem' },
-    { id: '6', descricao: 'Revisão' },
-    { id: '7', descricao: 'Pintura' },
-  ]);
+  const fetchServices = async () => {
+    const response = await fetchData('servicos');
+    setServicos(response);
+  };
 
-  // Função para adicionar o serviço à lista de tarefas e remover da lista de serviços
-  const handleSelectService = (serviceId: string) => {
+  React.useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const handleSelectService = (value: string | number) => {
+    const serviceId = Number(value);
     const selected = servicos.find(serv => serv.id === serviceId);
     if (!selected) return;
 
-    setTasks(prevTasks => [...prevTasks, { ...selected, price: 0 }]);
+    setTasks(prevTasks => [...prevTasks, { id: selected.id, descricao: selected.descricao, preco: selected.preco }]);
     setServicos(prevServicos => prevServicos.filter(serv => serv.id !== serviceId));
     setSelectedService('');
   };
@@ -52,15 +58,34 @@ const TaskScreen: React.FC<AtendimentoScreenProps> = ({ navigation }) => {
     console.log('Tarefas selecionadas:', selectedTasks);
     console.log('Observações:', observations);
     console.log('Opção selecionada:', selectedService);
+
+    setAtendimentoData({id: atendimento.id, observacao: observations, selectedTasks: selectedTasks});
     setConcluirVisible(true);
   };
 
-  const latitude = -23.55052;
-  const longitude = -46.633308;
-  const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-  const wazeUrl = `https://waze.com/ul?ll=${latitude},${longitude}&navigate=yes`;
+  const buscarCoordenadas = async (cep: string) => {
+    try {
+      const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`);
+      const data = await response.json();
+
+      if (data.location) {
+        setDataLocation({ latitude: data.location.coordinates.latitude, longitude: data.location.coordinates.longitude });
+        console.log("Coordenadas encontradas:", data.location.coordinates);
+      } else {
+        console.log("Coordenadas não encontradas");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar o CEP:", error);
+    }
+  };
+
+  const [googleMapsUrl, setGoogleMapsUrl] = useState<string>('');
+  const [wazeUrl, setWazeUrl] = useState<string>('');
 
   const openMaps = () => {
+    buscarCoordenadas(atendimento.cliente_endereco.endereco.cep);
+    setGoogleMapsUrl(`https://www.google.com/maps?q=${dataLocation.latitude},${dataLocation.longitude}`);
+    setWazeUrl(`https://waze.com/ul?ll=${dataLocation.latitude},${dataLocation.longitude}&navigate=yes`);
     setModalVisible(true);
   };
 
@@ -69,26 +94,28 @@ const TaskScreen: React.FC<AtendimentoScreenProps> = ({ navigation }) => {
       label: 'Google Maps',
       color: '#34A853',
       action: () => Linking.openURL(googleMapsUrl).catch(() =>
-        Alert.alert('Erro', 'Não foi possível abrir o Google Maps.')
+        Alert.alert('Erro', 'Não foi possível abrir o Google Maps.'),
       ),
     },
     {
       label: 'Waze',
       color: '#2D89FF',
       action: () => Linking.openURL(wazeUrl).catch(() =>
-        Alert.alert('Erro', 'Não foi possível abrir o Waze.')
+        Alert.alert('Erro', 'Não foi possível abrir o Waze.'),
       ),
     },
   ];
+
+  const endereco = `${atendimento.cliente_endereco.endereco.bairro}, ${atendimento.cliente_endereco.endereco.logradouro}`
 
   return (
     <ScrollView style={styles.container}>
       <HeaderSecondary navigation={navigation} />
       <View style={styles.main}>
         <View style={styles.header}>
-          <Text style={styles.title}>Nome do CLiente</Text>
-          <Text style={styles.subtitle}>Horário Marcado: 16h</Text>
-          <Text style={styles.subtitle}>Endereço: Rua das Carambolas, nº0.</Text>
+          <Text style={styles.title}>{atendimento.cliente_endereco.cliente.nome}</Text>
+          <Text style={styles.subtitle}>Horário Marcado: {atendimento.horario}h</Text>
+          <Text style={styles.subtitle}>Endereço: {endereco}</Text>
           <TouchableOpacity style={styles.locationButton} onPress={openMaps}>
             <Text style={styles.locationText}>ACESSAR LOCALIZAÇÃO</Text>
           </TouchableOpacity>
@@ -123,8 +150,9 @@ const TaskScreen: React.FC<AtendimentoScreenProps> = ({ navigation }) => {
       <Concluir
         modalVisible={concluirVisible}
         setModalVisible={setConcluirVisible}
-        valorTotal={selectedTasks.reduce((acc, task) => acc + (task.customPrice || task.price) * task.quantity, 0)}
-        onConfirm={(valorPago: number, desconto: number, metodo: string) => {}}
+        valorTotal={selectedTasks.reduce((acc, task) => acc + ((task.customPrice ?? task.preco ?? 0) * task.quantidade), 0)}
+        atendimentoData={atendimentoData}  // Passando o estado de atendimento para o modal Concluir
+        onConfirm={(valorPago: number, desconto: number, metodo: string) => { }}
       />
 
       <ModalEscolha modalVisible={modalVisible} setModalVisible={setModalVisible} choices={choices} />

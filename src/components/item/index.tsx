@@ -5,27 +5,27 @@ import colors from "../colors";
 
 interface ItemProps {
     task: {
-        id: string;
+        id: number;
         descricao: string;
-        price: number;
+        preco: number;
     };
-    selectedItems: { id: string; quantity: number; customPrice?: number }[];
-    setSelectedItems: (updateFn: (prev: { id: string; quantity: number; customPrice?: number }[]) => { id: string; quantity: number; customPrice?: number }[]) => void;
+    selectedItems: { id: number; quantidade: number; customPrice?: number }[];
+    setSelectedItems: (updateFn: (prev: { id: number; quantidade: number; customPrice?: number }[]) => { id: number; quantidade: number; customPrice?: number }[]) => void;
 }
 
 export default function Item({ task, selectedItems, setSelectedItems }: ItemProps) {
     const selectedItem = selectedItems.find((item) => item.id === task.id);
-    const [quantity, setQuantity] = useState(selectedItem ? selectedItem.quantity : 1);
-    const [customPrice, setCustomPrice] = useState<number>(selectedItem?.customPrice || task.price);
+    const [quantity, setQuantity] = useState(selectedItem ? selectedItem.quantidade : 1);
+    const [customPrice, setCustomPrice] = useState<number>(selectedItem?.customPrice || task.preco);
 
     useEffect(() => {
         if (!selectedItem) {
-            setCustomPrice(task.price);
+            setCustomPrice(task.preco);
             setQuantity(1);
         }
     }, [task.id, selectedItem]);
 
-    const toggleTask = (taskId: string) => {
+    const toggleTask = (taskId: number) => {
         if (selectedItem) {
             // Remover item
             setSelectedItems((prev) => prev.filter((item) => item.id !== taskId));
@@ -33,7 +33,7 @@ export default function Item({ task, selectedItems, setSelectedItems }: ItemProp
             // Adicionar item com quantidade e preço atual
             setSelectedItems((prev) => [
                 ...prev,
-                { id: taskId, quantity: quantity, customPrice: customPrice },
+                { id: taskId, quantidade: quantity, customPrice: customPrice },
             ]);
         }
     };
@@ -46,7 +46,7 @@ export default function Item({ task, selectedItems, setSelectedItems }: ItemProp
         if (selectedItem) {
             setSelectedItems((prev) =>
                 prev.map((item) =>
-                    item.id === task.id ? { ...item, quantity: validQuantity } : item
+                    item.id === task.id ? { ...item, quantidade: validQuantity } : item
                 )
             );
         }
@@ -54,7 +54,7 @@ export default function Item({ task, selectedItems, setSelectedItems }: ItemProp
 
     const updateCustomPrice = (newPrice: string) => {
         const cleanedPrice = newPrice.replace("R$", "").replace(",", ".").trim();
-        const parsedPrice = parseFloat(cleanedPrice) || task.price; // Se não for um número válido, utiliza o preço original
+        const parsedPrice = parseFloat(cleanedPrice) || task.preco; // Se não for um número válido, utiliza o preço original
         setCustomPrice(parsedPrice);
 
         if (selectedItem) {
@@ -77,7 +77,7 @@ export default function Item({ task, selectedItems, setSelectedItems }: ItemProp
             />
             <Text style={styles.taskName}>{task.descricao}</Text>
 
-            {task.price === 0 ? (
+            {task.preco === 0 ? (
                 <TextInput
                     style={styles.priceInput}
                     keyboardType="numeric"

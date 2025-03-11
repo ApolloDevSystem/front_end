@@ -11,7 +11,7 @@ const Details = ({hour, status}:DetailProps) => {
     
     return (
         <TouchableOpacity style={styles.container} >
-            <Legenda color={status} text={hour} borderRadius={10} order='2-1'/>
+            <Legenda color={status} text={hour} borderRadius={10} order='2-1' text_color="white"/>
         </TouchableOpacity>
     )
 }

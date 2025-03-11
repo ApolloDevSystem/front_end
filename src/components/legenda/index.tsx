@@ -7,9 +7,10 @@ type LegendaProps = {
   text?: string;
   borderRadius?: number;
   order?: '1-2' | '2-1';
+  text_color?: string;
 };
 
-const Legenda = ({ color, text, borderRadius, order = '1-2' }: LegendaProps) => {
+const Legenda = ({ color, text, borderRadius, order = '1-2', text_color }: LegendaProps) => {
   return (
     <View style={styles.legend}>
       {order === '1-2' ? (
@@ -19,7 +20,7 @@ const Legenda = ({ color, text, borderRadius, order = '1-2' }: LegendaProps) => 
         </>
       ) : (
         <>
-          <Text style={[styles.legendText, { color: colors[color] }]}>{text}</Text>
+          <Text style={[styles.legendText,  text_color ? {color: text_color} : { color: colors[color] }]}>{text}</Text>
           <View style={[styles.legendColor, { backgroundColor: colors[color], borderRadius: borderRadius }]} />
         </>
 
