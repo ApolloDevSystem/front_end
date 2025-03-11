@@ -15,7 +15,7 @@ function Home({ navigation }: HomeScreenProps) {
     navigation.navigate('Atendimentos');
   }
   const goToAgendamentos = () => {
-    navigation.navigate('AgendamentoScreen');
+    navigation.navigate('Agendamento');
   }
   const goToEquipamentos = () => {
     navigation.navigate('Equipamentos');

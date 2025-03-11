@@ -30,7 +30,7 @@ export type RootStackParamList = {
     Login: undefined;
     Home: undefined;
     Atendimentos: undefined;
-    AgendamentoScreen: undefined;
+    Agendamento: undefined;
     Equipamentos: undefined;
     Atendimento: {atendimento: Atendimento};
 };
