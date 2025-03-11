@@ -10,6 +10,8 @@ type HeaderProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, keyof RootStackParamList>;
 };
 
+
+
 const Header: React.FC<HeaderProps> = ({ navigation }) => {
 
     const [isModalVisible, setIsModalVisible] = React.useState(false)

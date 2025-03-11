@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import colors from "../colors";
 
 interface CustomTimePickerProps {
   selectedTime: string;
@@ -21,9 +22,11 @@ const TimePicker: React.FC<CustomTimePickerProps> = ({ selectedTime, onTimeSelec
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={showTimePicker}>
-        <Text style={styles.buttonText}>{selectedTime || "Selecione um horário"}</Text>
-      </TouchableOpacity>
+      <View style={styles.shadowWrapper}>
+        <TouchableOpacity style={styles.button} onPress={showTimePicker}>
+          <Text style={styles.buttonText}>{selectedTime || "Selecione um horário"}</Text>
+        </TouchableOpacity>
+      </View>
 
       <DateTimePickerModal
         isVisible={isTimePickerVisible}
@@ -37,19 +40,28 @@ const TimePicker: React.FC<CustomTimePickerProps> = ({ selectedTime, onTimeSelec
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 10,
+  container: { 
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
+  },
+  shadowWrapper: { // Envolve o botão e recebe a sombra
+    width: "100%",
+    borderRadius: 8,
+    backgroundColor: "#ffffff", // Necessário para sombras no iOS
+    shadowColor: colors.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // Android
   },
   button: {
-    backgroundColor: "#ffffff",
+    height: 50,
     paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     borderRadius: 12,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 4 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 4,
-    // elevation: 5,
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 14,
@@ -57,5 +69,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
 
 export default TimePicker;

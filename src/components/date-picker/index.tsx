@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import colors from "../colors";
 
 interface CustomDatePickerProps {
   selectedDate: string;
@@ -21,10 +22,12 @@ const DatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDateSelec
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={showDatePicker}>
-        <Text style={styles.buttonText}>{selectedDate || "Selecione uma data"}</Text>
-      </TouchableOpacity>
-
+      <View style={styles.shadowWrapper}>
+        <TouchableOpacity style={styles.button} onPress={showDatePicker}>
+          <Text style={styles.buttonText}>{selectedDate || "Selecione uma data"}</Text>
+        </TouchableOpacity>
+      </View>
+  
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
@@ -36,7 +39,7 @@ const DatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDateSelec
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -44,21 +47,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5F5F5",
+    marginBottom: 15
+  },
+  shadowWrapper: {
+    width: "100%",
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF", // Necessário para sombras no iOS
+    shadowColor: colors.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // Para Android
   },
   button: {
-    width:"100%",
     height: 50,
-    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     paddingHorizontal: 15,
     paddingVertical: 12,
-    marginBottom: 20,
-    fontSize: 16,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 4 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 4,
-    // elevation: 5,
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 14,
@@ -70,5 +76,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
 });
+
 
 export default DatePicker;

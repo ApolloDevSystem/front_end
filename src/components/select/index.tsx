@@ -24,7 +24,7 @@ const CustomSelect = <T,>({
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.pickerContainer}>
-        <Picker selectedValue={selectedValue} onValueChange={onValueChange} style={styles.picker}>
+        <Picker selectedValue={selectedValue} onValueChange={onValueChange} style={styles.picker} >
           <Picker.Item label="Selecione..." value="" />
           {objeto.map((item) => (
             <Picker.Item

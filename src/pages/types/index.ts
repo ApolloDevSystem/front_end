@@ -7,16 +7,9 @@ export type Atendimento = {
     status: string;
     horario: string;
     cliente_endereco: {
-        cliente: {
-            nome: string;
-        }
-        endereco: {
-            logradouro: string;
-            cep: string;
-            bairro: string;
-
-        }
-    },
+        cliente: cliente,
+        endereco: endereco     
+    }
     servicos: servico[]
 };
 
@@ -24,6 +17,18 @@ export type servico = {
     id: number;
     descricao: string;
     preco: number;
+}
+
+export type cliente = {
+    id: number;
+    nome: string;
+}
+
+export type endereco = {
+    id: number
+    logradouro: string;
+    cep: string;
+    bairro: string;
 }
 
 export type RootStackParamList = {
@@ -38,3 +43,4 @@ export type RootStackParamList = {
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 export type AtendimentosScreenProps = NativeStackScreenProps<RootStackParamList, 'Atendimentos'>;
 export type AtendimentoScreenProps = NativeStackScreenProps<RootStackParamList, 'Atendimento'>;
+export type AgendamentoScreenProps = NativeStackScreenProps<RootStackParamList, 'Agendamento'>;

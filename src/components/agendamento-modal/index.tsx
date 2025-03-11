@@ -1,23 +1,20 @@
 import React from "react";
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { servico, cliente, endereco } from "../../pages/types";
 
 interface AgendamentoModalProps {
     visible: boolean;
     onClose: () => void;
     onConfirm: () => void;
     formData: {
-        cliente: string;
-        endereco: string;
+        cliente: cliente;
+        endereco: endereco;
         linkGoogleMaps: string;
         data: string;
         horario: string;
-        servicos: {
-            instalacao: boolean;
-            limpeza: boolean;
-            manutencaoEletrica: boolean;
-        };
+        servicos: servico[];
     };
-    serviceOptions: { label: string; value: string }[];
+    serviceOptions: servico[];
 }
 
 const AgendamentoModal: React.FC<AgendamentoModalProps> = ({
@@ -34,11 +31,11 @@ const AgendamentoModal: React.FC<AgendamentoModalProps> = ({
                     <Text style={styles.title}>Confirme seu Agendamento</Text>
                     <Text>
                         <Text style={styles.label}>Cliente:</Text>{" "}
-                        {formData.cliente}
+                        {formData.cliente.nome}
                     </Text>
                     <Text>
                         <Text style={styles.label}>Endereço:</Text>{" "}
-                        {formData.endereco}
+                        {formData.endereco.logradouro}
                     </Text>
                     <Text>
                         <Text style={styles.label}>Data:</Text> {formData.data}
@@ -49,14 +46,11 @@ const AgendamentoModal: React.FC<AgendamentoModalProps> = ({
                     </Text>
                     <Text style={styles.label}>Serviços:</Text>
                     {serviceOptions
-                        .filter(
-                            (option: { label: string; value: string }) =>
-                                formData.servicos[
-                                    option.value as keyof typeof formData.servicos
-                                ]
+                        .filter((option: servico) =>
+                            formData.servicos[option.descricao as keyof typeof formData.servicos]
                         )
-                        .map((option: { label: string; value: string }) => (
-                            <Text key={option.value}>• {option.label}</Text>
+                        .map((option: servico) => (
+                            <Text key={option.descricao}>• {option.descricao}</Text>
                         ))}
 
                     <View style={styles.buttonContainer}>
